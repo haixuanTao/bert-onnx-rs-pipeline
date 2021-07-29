@@ -1,0 +1,4 @@
+*.lock
+**/*.bin
+/target
+/training/train_October_9_2012.csv

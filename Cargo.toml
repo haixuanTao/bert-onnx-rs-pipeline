@@ -1,0 +1,18 @@
+[package]
+name = "machine-learning"
+version = "0.1.0"
+authors = ["haixuanTao <hai-xuan.tao@student.ecp.fr>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+csv = "1.1"
+serde=  "1"
+serde_with = "1.6.4"
+chrono = "0.4.19"
+image = "0.23.14"
+onnxruntime-sys = { path = "/home/peter/Documents/CONTRIB/onnxruntime-rs/onnxruntime-sys" }
+onnxruntime = { path = "/home/peter/Documents/CONTRIB/onnxruntime-rs/onnxruntime", features = ['model-fetching']}
+tokenizers = "0.10.1"
+single = "1.0.0"
