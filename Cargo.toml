@@ -10,9 +10,6 @@ edition = "2018"
 csv = "1.1"
 serde=  "1"
 serde_with = "1.6.4"
-chrono = "0.4.19"
 image = "0.23.14"
-onnxruntime-sys = { path = "/home/peter/Documents/CONTRIB/onnxruntime-rs/onnxruntime-sys" }
-onnxruntime = { path = "/home/peter/Documents/CONTRIB/onnxruntime-rs/onnxruntime", features = ['model-fetching']}
 tokenizers = "0.10.1"
-single = "1.0.0"
+onnxruntime = { git = "https://github.com/haixuanTao/onnxruntime-rs", branch = 'owned_environment'}

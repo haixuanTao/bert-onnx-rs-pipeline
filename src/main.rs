@@ -14,6 +14,7 @@ use tokenizers::utils::padding::{PaddingDirection::Right, PaddingParams, Padding
 use tokenizers::utils::truncation::TruncationParams;
 use tokenizers::utils::truncation::TruncationStrategy::LongestFirst;
 fn main() -> std::result::Result<(), OrtError> {
+    let start = Instant::now();
     let vocab_path = "/home/peter/Documents/BLOG/machine-learning/src/vocab.txt";
     let wp_builder = WordPieceBuilder::new()
         .files(vocab_path.into())
@@ -72,30 +73,34 @@ fn main() -> std::result::Result<(), OrtError> {
     let mut rdr = ReaderBuilder::new()
         .from_path("/home/peter/Documents/BLOG/machine-learning/medium.csv")
         .unwrap();
-    let df: Vec<Encoding> = rdr
+    let environment = environment::Environment::builder()
+        .with_name("test")
+        .build()?;
+    let session = std::sync::Arc::new(std::sync::Mutex::new(
+        environment
+            .new_session_builder()?
+            .use_cuda(0)?
+            .with_optimization_level(GraphOptimizationLevel::All)?
+            .with_model_from_file("./src/onnx_model.onnx")?,
+    ));
+    let setup = Instant::now();
+
+    let df: Vec<EncodeInput> = rdr
         .deserialize()
         .into_iter()
         .map(
-            |result: std::result::Result<utils::DataFrame, csv::Error>| -> Encoding {
+            |result: std::result::Result<utils::DataFrame, csv::Error>| -> EncodeInput {
                 match result {
-                    Ok(rec) => tokenizer
-                        .encode(
-                            EncodeInput::Single(
-                                (rec.Title.unwrap() + " ".into() + &rec.BodyMarkdown.unwrap())
-                                    .into(),
-                            ),
-                            true,
-                        )
-                        .unwrap(),
-                    Err(e) => tokenizer
-                        .encode(EncodeInput::Single("[ERROR]".to_string()), true)
-                        .unwrap(),
+                    Ok(rec) => {
+                        EncodeInput::Single(rec.Title.unwrap() + " " + &rec.BodyMarkdown.unwrap())
+                    }
+                    Err(_) => EncodeInput::Single("[ERROR]".to_string()),
                 }
             },
         )
         .collect();
 
-    let mut input_ids = df;
+    let input_ids = tokenizer.encode_batch(df, true).unwrap();
     let mut masks: Vec<ndarray::ArrayBase<ndarray::OwnedRepr<i64>, ndarray::Dim<[usize; 2]>>> =
         Vec::new();
 
@@ -117,17 +122,7 @@ fn main() -> std::result::Result<(), OrtError> {
             token = ndarray::Array::zeros((256, 60));
         }
     }
-    let environment = environment::Environment::builder()
-        .with_name("test")
-        .build()?;
-    let session = std::sync::Arc::new(std::sync::Mutex::new(
-        environment
-            .new_session_builder()?
-            .use_cuda(0)?
-            .with_optimization_level(GraphOptimizationLevel::All)?
-            .with_model_from_file("./src/onnx_model.onnx")?,
-    ));
-    let now = Instant::now();
+    let read_encode = Instant::now();
 
     let file = File::create("src/rust_output.csv").unwrap();
     let mut writer = WriterBuilder::new().has_headers(false).from_writer(file);
@@ -145,7 +140,13 @@ fn main() -> std::result::Result<(), OrtError> {
             }
         });
     }
-    println!("{}", now.elapsed().as_millis());
+
+    let write_onnx = Instant::now();
+    println!("Setup: {}", (setup - start).as_secs());
+
+    println!("Read Encode: {}", (read_encode - setup).as_secs());
+
+    println!("Write Onnx: {}", (write_onnx - read_encode).as_secs());
     //   println!(
     //       "outputs: {:#?}",
     //       outputs
