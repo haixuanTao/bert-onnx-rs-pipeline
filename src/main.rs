@@ -100,7 +100,10 @@ fn main() -> std::result::Result<(), OrtError> {
         )
         .collect();
 
+    let read = Instant::now();
+
     let input_ids = tokenizer.encode_batch(df, true).unwrap();
+
     let mut masks: Vec<ndarray::ArrayBase<ndarray::OwnedRepr<i64>, ndarray::Dim<[usize; 2]>>> =
         Vec::new();
 
@@ -122,7 +125,7 @@ fn main() -> std::result::Result<(), OrtError> {
             token = ndarray::Array::zeros((256, 60));
         }
     }
-    let read_encode = Instant::now();
+    let encode = Instant::now();
 
     let file = File::create("src/rust_output.csv").unwrap();
     let mut writer = WriterBuilder::new().has_headers(false).from_writer(file);
@@ -142,11 +145,12 @@ fn main() -> std::result::Result<(), OrtError> {
     }
 
     let write_onnx = Instant::now();
-    println!("Setup: {}", (setup - start).as_secs());
+    println!("Setup: {}ms", (setup - start).as_millis());
 
-    println!("Read Encode: {}", (read_encode - setup).as_secs());
+    println!("Read: {}ms", (read - setup).as_millis());
 
-    println!("Write Onnx: {}", (write_onnx - read_encode).as_secs());
+    println!("Encode: {}ms", (encode - read).as_millis());
+    println!("Write Onnx: {}s", (write_onnx - encode).as_secs());
     //   println!(
     //       "outputs: {:#?}",
     //       outputs
