@@ -8,7 +8,7 @@ This demo showcase the use of onnxruntime-rs with a GPU on CUDA 11 to run Bert i
 - NVIDIA GPU with CUDA 11 (Not sure if CUDA 10 works)
 - Rust (obviously)
 
-## training and converting to ONNX (Python)
+# training and converting to ONNX (Python)
 
 ## Installation
 
@@ -17,6 +17,11 @@ Download the data https://www.kaggle.com/START-UMD/gtd -> `train_October_9_2012.
 ```bash
 cd training
 pip install -r requirements.txt
+```
+
+## Run
+
+```
 python pytorch-model.py
 ```
 
@@ -46,7 +51,7 @@ cargo build --release
 cargo run --release
 ```
 
-or
+or after build:
 
 ```bash
 export LD_LIBRARY_PATH=path/to/onnxruntime-linux-x64-gpu-1.8.0/lib:${LD_LIBRARY_PATH}

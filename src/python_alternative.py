@@ -85,9 +85,9 @@ with open("python_output.csv", "w") as f:
 save = time.time()
 
 
-print("Boot up time : %.1f s" % ((setup - start)))
-print("Read time : %.1f s" % ((delta_read)))
-print("Encoding time : %.1f s" % ((delta_encoding)))
-print("onnx time : %.1f s" % ((delta_onnx)))
-print("after infering time : %.1f s" % ((save - after_infering)))
+print("Boot up time : %.3f s" % ((setup - start)))
+print("Read time : %.3f s" % ((delta_read)))
+print("Encoding time : %.3f s" % ((delta_encoding)))
+print("onnx time : %.3f s" % ((delta_onnx)))
+print("after infering time : %.3f s" % ((save - after_infering)))
 # print(pred_onx)
