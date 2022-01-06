@@ -7,6 +7,7 @@ This demo showcase the use of onnxruntime-rs with a GPU on CUDA 11 to run Bert i
 - Linux x86_64
 - NVIDIA GPU with CUDA 11 (Not sure if CUDA 10 works)
 - Rust (obviously)
+- git lfs. Install it with https://git-lfs.github.com/
 
 # training and converting to ONNX (Python)
 

@@ -1,4 +1,4 @@
 *.onnx filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
 *.json filter=lfs diff=lfs merge=lfs -text
-*.txt filter=lfs diff=lfs merge=lfs -text
+src/vocab.txt filter=lfs diff=lfs merge=lfs -text
