@@ -13,7 +13,7 @@ This demo showcase the use of onnxruntime-rs with a GPU on CUDA 11 to run Bert i
 
 ## Installation
 
-Download the data https://www.kaggle.com/START-UMD/gtd -> `train_October_9_2012.csv` and put it in the folder training.
+Download the data https://www.kaggle.com/c/predict-closed-questions-on-stack-overflow/data?select=train_October_9_2012.csv -> `train_October_9_2012.csv` and put it in the folder training.
 
 ```bash
 cd training
