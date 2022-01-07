@@ -17,7 +17,7 @@ Download the data https://www.kaggle.com/c/predict-closed-questions-on-stack-ove
 
 ```bash
 cd training
-pip install -r requirements.txt
+pip install -r requirement.txt
 ```
 
 ## Run
