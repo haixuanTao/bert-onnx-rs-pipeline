@@ -15,7 +15,7 @@ use tokenizers::utils::truncation::TruncationParams;
 use tokenizers::utils::truncation::TruncationStrategy::LongestFirst;
 fn main() -> std::result::Result<(), OrtError> {
     let start = Instant::now();
-    let vocab_path = "/home/peter/Documents/BLOG/machine-learning/src/vocab.txt";
+    let vocab_path = "./src/vocab.txt";
     let wp_builder = WordPieceBuilder::new()
         .files(vocab_path.into())
         .continuing_subword_prefix("##".into())
@@ -71,7 +71,7 @@ fn main() -> std::result::Result<(), OrtError> {
     }));
 
     let mut rdr = ReaderBuilder::new()
-        .from_path("/home/peter/Documents/BLOG/machine-learning/medium.csv")
+        .from_path("./medium.csv")
         .unwrap();
     let environment = environment::Environment::builder()
         .with_name("test")
